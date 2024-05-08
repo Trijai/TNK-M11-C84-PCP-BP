@@ -26,7 +26,7 @@ def signup():
         password = request.form.get("password")
 
         # Generate hash for the password instead of encrypting it 
-        password = encrypt(password, publicKey)
+        password = generateHash(password)
 
         blockData = {
             'username': username,
@@ -47,11 +47,11 @@ def signin():
         password = request.form['password']
 
         # Replace following line and Generate Hash of the password variable recieved from the signin form and save it in variable 'hash'
-        plainPassword = decrypt(blockData['password'], privateKey)
+        hash = generateHash(password)
 
         # Compair hash password stored in the block and the current hash insead of plainPassword == password
-        if blockData['username'] == username and plainPassword == password:
-                    return render_template('profile.html', block= blockData)
+        if blockData['username'] == username and blockData['password'] == hash:
+             return render_template('profile.html', block= blockData)
 
         return "Invalid credentials!"
     return render_template('signin.html')
